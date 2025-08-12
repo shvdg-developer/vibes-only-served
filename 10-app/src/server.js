@@ -21,10 +21,12 @@ async function buildServer() {
     schema: {
       summary: 'OpenAPI 3.0 document',
       tags: ['meta'],
-      response: { 200: { type: 'object' } },
+      // No response schema to avoid stripping properties during serialization
     },
-  }, async function handler() {
-    return this.swagger();
+  }, async function handler(request, reply) {
+    const doc = this.swagger();
+    reply.type('application/json; charset=utf-8');
+    return doc;
   });
 
   return { app, env };
