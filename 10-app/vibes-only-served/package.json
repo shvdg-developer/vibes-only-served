@@ -1,7 +1,7 @@
 {
   "name": "vibes-only-served-api",
   "version": "0.1.0",
-  "description": "Vibes Only Served – Fastify API (v0)",
+  "description": "Vibes Only Served – Fastify API",
   "private": true,
   "main": "src/server.js",
   "type": "commonjs",
