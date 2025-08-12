@@ -12,7 +12,7 @@
     "dev": "nodemon --watch src --ext js --exec node src/server.js",
     "start": "node src/server.js",
     "lint": "echo 'No linter configured for v0'",
-    "test": "tap --reporter=list \"test/**/*.spec.js\""
+    "test": "tap \"test/**/*.spec.js\""
   },
   "dependencies": {
     "@fastify/swagger": "^9.5.1",
@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "nodemon": "^3.0.0",
-    "tap": "^21.0.0",
+    "tap": "^21.1.0",
     "@apidevtools/swagger-parser": "^10.0.3"
   }
 }
