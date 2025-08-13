@@ -12,7 +12,8 @@
     "dev": "nodemon --watch src --ext js --exec node src/server.js",
     "start": "node src/server.js",
     "lint": "echo 'No linter configured for v0'",
-    "test": "tap \"test/**/*.spec.js\""
+    "test": "tap \"test/**/*.spec.js\"",
+    "seed": "node src/cli/seed.js"
   },
   "dependencies": {
     "@fastify/swagger": "^9.5.1",
