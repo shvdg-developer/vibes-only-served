@@ -68,4 +68,39 @@ podman run --rm -p 3000:3000 --name vibes-api \
   vibes-api
 ```
 
+### Database seeding
+From `10-app/vibes-only-served` you can seed the SQLite database from a directory of JSON files:
+
+```bash
+# Seed default DB (data/app.db) from a directory
+npm run seed -- --dir ./seeds
+
+# Specify a custom DB path
+npm run seed -- --db ./data/app.db --dir ./seeds
+
+# Dry-run (shows counts, no writes)
+npm run seed -- --dir ./seeds --dry-run
+
+# Clear table first, then seed
+npm run seed -- --dir ./seeds --clear
+```
+
+JSON formats supported per file:
+
+```json
+["First idea", "Second idea"]
+```
+
+```json
+[{ "content": "First idea" }, { "content": "Second", "createdAt": "2024-01-01T00:00:00Z" }]
+```
+
+```json
+{ "ideas": ["One", { "content": "Two" }] }
+```
+
+- Files must have `.json` extension
+- Duplicates (by exact `content`) are ignored during a single run and against existing DB rows
+- `createdAt` is optional; if omitted the DB default will be used
+
 
