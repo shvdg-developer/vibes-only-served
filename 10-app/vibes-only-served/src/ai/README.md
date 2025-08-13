@@ -5,7 +5,7 @@ This module defines a minimal `AiClient` interface and adapters for different AI
 - Interface (via JSDoc):
   - `generateIdeas({ count }) => Promise<Idea[]>`
 - Dummy adapter: deterministic placeholder ideas for local development.
-- Factory: `getDefaultAiClient()` returns the dummy client for now; can be extended to select based on environment.
+- Factory: `createAiClient({ provider })` selects an adapter (defaults to `dummy`), and can be wired to an env var later.
 
 Types:
 - `Idea`: `{ id, title, summary, objective, tags[] }`

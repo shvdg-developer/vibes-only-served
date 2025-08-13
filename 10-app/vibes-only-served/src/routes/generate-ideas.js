@@ -1,6 +1,8 @@
-const { getDefaultAiClient } = require('../ai/get-client');
+const { createAiClient } = require('../ai/factory');
 
-async function routes(fastify) {
+async function routes(fastify, opts) {
+  const ai = createAiClient({ provider: opts?.aiProvider || 'dummy' });
+
   fastify.get('/api/v1/generate-ideas', {
     schema: {
       summary: 'Generate ideas',
@@ -52,7 +54,6 @@ async function routes(fastify) {
       return { error: "Invalid 'count'. Must be an integer between 1 and 12." };
     }
 
-    const ai = getDefaultAiClient();
     const ideas = await ai.generateIdeas({ count });
 
     return ideas;

@@ -17,7 +17,7 @@ async function buildServer() {
   await app.register(registerSwagger, { appVersion: env.appVersion });
   await app.register(helloRoutes);
   await app.register(healthRoutes, { appVersion: env.appVersion, gitCommit: env.gitCommit });
-  await app.register(generateIdeasRoutes);
+  await app.register(generateIdeasRoutes, { aiProvider: env.aiProvider });
 
   app.get('/openapi.json', {
     schema: {
