@@ -1,0 +1,8 @@
+Configuration and Environment
+
+Single Source
+- Read process.env only in src/config/env.js. Export normalized config (numbers/strings/booleans).
+
+Defaults and Docs
+- Provide safe defaults. Document new vars in README Configuration.
+- Pass config into plugins/routes via options; avoid global mutable config.

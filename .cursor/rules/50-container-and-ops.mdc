@@ -1,0 +1,13 @@
+Containerization and Ops
+
+Container
+- Base: node:22-alpine. Build with npm ci --omit=dev.
+- Copy only needed files (package.json/lock, src/). Run as non-root (USER node).
+- Expose 3000. Environment variables are provided at runtime; do not bake secrets.
+
+Health and Readiness
+- Keep /healthz and /readyz simple, fast, and without external calls.
+- If adding dependencies (DB, queue), keep /readyz reflective of readiness but quick.
+
+Local Dev
+- Use npm run dev with nodemon. Production uses npm start.

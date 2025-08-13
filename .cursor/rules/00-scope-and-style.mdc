@@ -1,0 +1,19 @@
+Vibes Only Served API – Scope and Style
+
+Scope
+- Apply ONLY to files under: 10-app/vibes-only-served/**
+
+Stack Guardrails
+- Runtime: Node.js ≥22, Framework: Fastify 5, Language: JavaScript (CommonJS), Testing: tap
+- Do not convert to ESM or TypeScript. Keep require/module.exports.
+- Do not introduce new frameworks or architectural shifts without explicit request.
+
+Code Style
+- Prefer explicit, descriptive names. Use early returns, shallow nesting.
+- Use Fastify logger (app.log / request.log), not console.log.
+- Avoid reading process.env outside src/config/env.js.
+- Keep file structure consistent with README.
+
+Change Hygiene
+- When adding endpoints: include JSON Schema, tests, and update README sections (Endpoints/Configuration).
+- Keep dependencies minimal; prefer stdlib and current stack.

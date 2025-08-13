@@ -1,0 +1,16 @@
+Fastify Plugins
+
+Server Lifecycle
+- Export a buildServer() that constructs but does not listen.
+- In tests, use buildServer() + app.inject; do not listen on a real port.
+
+Registration Order
+- Register OpenAPI/Swagger plugin first, then routes, then meta endpoints.
+
+Plugin Authoring
+- Wrap plugins with fastify-plugin:
+  - const fp = require('fastify-plugin');
+  - module.exports = fp(async function plugin(fastify, opts) { /* ... */ });
+
+Logging and Errors
+- Use request.log / app.log. Prefer Fastify’s error handling; avoid bare try/catch unless enriching context.

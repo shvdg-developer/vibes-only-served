@@ -1,0 +1,9 @@
+OpenAPI and Docs
+
+Plugin
+- Keep @fastify/swagger registered before routes so tags/paths are captured.
+- Serve UI at /docs and JSON at /openapi.json using this.swagger().
+
+Modeling
+- Ensure each route has summary, tags, and request/response schemas.
+- When adding auth or servers metadata, update src/plugins/swagger.js coherently (no hardcoding environment-specific URLs in code paths).

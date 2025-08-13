@@ -1,0 +1,13 @@
+Testing with tap
+
+Test Structure
+- Place tests in test/**/*.spec.js.
+- Use the helper to build the app and t.teardown(() => app.close()).
+- Prefer app.inject over real network calls.
+
+Coverage
+- For each route: test happy path, input validation (400), and boundary cases.
+- For OpenAPI: GET /openapi.json must be 200 and validate via @apidevtools/swagger-parser.
+
+Example
+- Arrange → Act → Assert; assert statusCode, content-type (JSON), and JSON body shape with t.same or t.match.

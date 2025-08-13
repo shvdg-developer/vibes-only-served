@@ -1,0 +1,16 @@
+Routes and JSON Schemas
+
+Versioning and Paths
+- Public API routes live under /api/v1/. Ops/meta may be top-level as in health/version.
+
+Schema Requirements
+- Provide schema: summary, description, tags.
+- Validate input: querystring/params/body with JSON Schema. Set additionalProperties: false where applicable.
+- Define response schemas for all expected codes (at least 200). Include required fields.
+
+Handler Shape
+- Prefer: async (request, reply) => { return { ... } } and let Fastify serialize JSON.
+- Default inputs via nullish coalescing (??) and defaults in schema.
+
+Tags
+- Use domain tags for features (e.g., ‘hello’). Keep ‘ops’ for health/version, ‘meta’ for docs/openapi.

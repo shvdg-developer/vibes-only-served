@@ -1,0 +1,9 @@
+Dependencies and Scripts
+
+Dependencies
+- Prefer CommonJS-compatible libs. Avoid ESM-only dependencies unless explicitly approved.
+- Keep prod deps lean; devDeps for tooling/tests only.
+
+Scripts
+- Maintain: dev, start, test (tap). Add lint when a linter is introduced; do not stub behavior silently.
+- When adding tools, wire into scripts with non-interactive flags.
