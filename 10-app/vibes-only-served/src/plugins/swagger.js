@@ -11,6 +11,7 @@ async function swaggerPlugin(fastify, opts) {
         { name: 'hello', description: 'Greeting endpoint' },
         { name: 'ops', description: 'Operational endpoints' },
         { name: 'meta', description: 'Meta endpoints' },
+        { name: 'ideas', description: 'Idea endpoints' },
       ],
     },
   });
