@@ -32,6 +32,7 @@ const mkdirAsync = promisify(fs.mkdir);
  * @property {() => Promise<Idea[]>} listIdeas List all ideas.
  * @property {(id: string) => Promise<boolean>} deleteIdeaById Delete by id; returns true if a row was deleted, false otherwise.
  * @property {() => void} close Close the database instance (flushes nothing by itself; call persist() first if needed).
+ * @property {(options?: { batchSize?: number }) => AsyncGenerator<Idea[], void, void>} iterateIdeas Iterate through all ideas in batches (default batch size: 100).
  */
 
 /**
@@ -145,6 +146,35 @@ async function createDbClient(options = {}) {
     return results;
   }
 
+  async function* iterateIdeas(options = {}) {
+    const defaultBatchSize = 100;
+    const batchSize = Number.isFinite(options.batchSize) && options.batchSize > 0
+      ? Math.floor(options.batchSize)
+      : defaultBatchSize;
+
+    let offset = 0;
+    while (true) {
+      const statement = db.prepare('SELECT id, title, summary, objective, tags FROM ideas ORDER BY rowid ASC LIMIT ? OFFSET ?');
+      const batch = [];
+      try {
+        statement.bind([batchSize, offset]);
+        while (statement.step()) {
+          const row = statement.getAsObject();
+          batch.push(mapRowToIdea(row));
+        }
+      } finally {
+        statement.free();
+      }
+
+      if (batch.length === 0) {
+        return;
+      }
+
+      yield batch;
+      offset += batch.length;
+    }
+  }
+
   async function deleteIdeaById(id) {
     if (!id || typeof id !== 'string') {
       throw new Error('id must be a non-empty string');
@@ -171,6 +201,7 @@ async function createDbClient(options = {}) {
     createIdea,
     getIdeaById,
     listIdeas,
+    iterateIdeas,
     deleteIdeaById,
     close,
   };
