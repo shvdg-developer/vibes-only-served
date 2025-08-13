@@ -2,6 +2,3 @@ node_modules
 .DS_Store
 .tap/
 coverage/
-seeds/
-!seeds/README.md
-!seeds/example.json
