@@ -17,6 +17,7 @@ The application source lives at `10-app/vibes-only-served`.
 - `GET /healthz` → 200 `{ "status": "ok" }`
 - `GET /readyz` → 200 `{ "status": "ready" }`
 - `GET /version` → 200 `{ "version": "v0.1.0", "commit": "<sha|local>" }`
+- `GET /api/v1/ideas` → 200 `[ { id, title, summary, objective, tags: [] }, ... ]`
 - `GET /docs` → Swagger UI
 - `GET /openapi.json` → OpenAPI 3.0 document
 
