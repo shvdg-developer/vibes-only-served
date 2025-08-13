@@ -19,13 +19,13 @@ const mkdirAsync = promisify(fs.mkdir);
  */
 
 /**
- * @typedef {Object} IdeasDbClientOptions
+ * @typedef {Object} DbClientOptions
  * @property {string} [storageFilePath] Absolute or relative path to persist the database contents. If omitted, DB is in-memory only.
  * @property {boolean} [autoPersist] If true and storageFilePath is provided, persist after each write operation. Default: true when storageFilePath is set.
  */
 
 /**
- * @typedef {Object} IdeasDbClient
+ * @typedef {Object} DbClient
  * @property {() => Promise<void>} persist Force persistence of the current DB state to disk (no-op when storageFilePath is not provided)
  * @property {(idea: Idea) => Promise<Idea>} createIdea Insert a new idea. Throws if id already exists or validation fails.
  * @property {(id: string) => Promise<Idea | null>} getIdeaById Fetch a single idea by id; returns null if not found.
@@ -35,17 +35,17 @@ const mkdirAsync = promisify(fs.mkdir);
  */
 
 /**
- * Initialize and return an Ideas database client backed by SQL.js (SQLite compiled to WebAssembly).
- * This is an embedded, file-optional database with a single `ideas` table mirroring the Idea structure.
+ * Initialize and return a database client backed by SQL.js (SQLite compiled to WebAssembly).
+ * This embedded, file-optional DB currently manages a single `ideas` table mirroring the Idea structure.
  *
  * - Column mapping: id TEXT PRIMARY KEY, title TEXT, summary TEXT, objective TEXT, tags TEXT (JSON encoded array)
  * - If `storageFilePath` is provided and exists, it will be loaded. Otherwise, a fresh DB is created.
  * - When `autoPersist` is true and a storage path is provided, write operations will save immediately.
  *
- * @param {IdeasDbClientOptions} [options]
- * @returns {Promise<IdeasDbClient>}
+ * @param {DbClientOptions} [options]
+ * @returns {Promise<DbClient>}
  */
-async function createIdeasDbClient(options = {}) {
+async function createDbClient(options = {}) {
   const storageFilePath = options.storageFilePath ? String(options.storageFilePath) : undefined;
   const autoPersist = options.autoPersist ?? Boolean(storageFilePath);
 
@@ -77,7 +77,6 @@ async function createIdeasDbClient(options = {}) {
   }
 
   function close() {
-    // Note: SQL.js DB does not need explicit close for resources beyond memory release.
     if (db) {
       db.close();
     }
@@ -87,7 +86,7 @@ async function createIdeasDbClient(options = {}) {
     validateIdeaForInsert(idea);
 
     const statement = db.prepare(
-      'INSERT INTO ideas (id, title, summary, objective, tags) VALUES (?, ?, ?, ?, ?)' 
+      'INSERT INTO ideas (id, title, summary, objective, tags) VALUES (?, ?, ?, ?, ?)'
     );
 
     try {
@@ -162,12 +161,11 @@ async function createIdeasDbClient(options = {}) {
       await persist();
     }
 
-    // With SQL.js, we need to check if the row existed. Use a quick existence check.
     const remaining = await getIdeaById(id);
     return remaining === null;
   }
 
-  /** @type {IdeasDbClient} */
+  /** @type {DbClient} */
   const client = {
     persist,
     createIdea,
@@ -187,14 +185,11 @@ function ensureSchema(db) {
       'title TEXT NOT NULL,' +
       'summary TEXT NOT NULL,' +
       'objective TEXT NOT NULL,' +
-      'tags TEXT NOT NULL' + // JSON-encoded array of strings
+      'tags TEXT NOT NULL' +
     ')'
   );
 }
 
-/**
- * @param {any} candidate
- */
 function validateIdeaForInsert(candidate) {
   const baseMessage = 'Invalid idea: ';
   if (!candidate || typeof candidate !== 'object') {
@@ -232,4 +227,4 @@ function safeParseTags(value) {
   }
 }
 
-module.exports = { createIdeasDbClient };
+module.exports = { createDbClient };

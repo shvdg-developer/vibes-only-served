@@ -4,7 +4,7 @@ const t = require('tap');
 const fs = require('node:fs');
 const path = require('node:path');
 
-const { createIdeasDbClient } = require('../src/db/ideas-client');
+const { createDbClient } = require('../src/db/client');
 
 function tempDbPath(testName) {
   const file = path.join(__dirname, `.tmp-${testName}.sqlite`);
@@ -13,7 +13,7 @@ function tempDbPath(testName) {
 }
 
 t.test('ideas client: in-memory CRUD', async (t) => {
-  const client = await createIdeasDbClient();
+  const client = await createDbClient();
   t.teardown(() => client.close());
 
   const idea = {
@@ -41,7 +41,7 @@ t.test('ideas client: in-memory CRUD', async (t) => {
 });
 
 t.test('ideas client: duplicate id error', async (t) => {
-  const client = await createIdeasDbClient();
+  const client = await createDbClient();
   t.teardown(() => client.close());
 
   const idea = {
@@ -55,7 +55,7 @@ t.test('ideas client: duplicate id error', async (t) => {
 t.test('ideas client: persistence to file', async (t) => {
   const filePath = tempDbPath('persist');
 
-  const clientA = await createIdeasDbClient({ storageFilePath: filePath });
+  const clientA = await createDbClient({ storageFilePath: filePath });
   t.teardown(() => clientA.close());
 
   const idea = { id: 'p1', title: 'T', summary: 'S', objective: 'O', tags: ['x'] };
@@ -66,7 +66,7 @@ t.test('ideas client: persistence to file', async (t) => {
   clientA.close();
 
   // Load fresh client from file
-  const clientB = await createIdeasDbClient({ storageFilePath: filePath });
+  const clientB = await createDbClient({ storageFilePath: filePath });
   t.teardown(() => clientB.close());
 
   const fetched = await clientB.getIdeaById('p1');
