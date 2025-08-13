@@ -4,6 +4,8 @@ const { loadEnvConfig } = require('./config/env');
 const registerSwagger = require('./plugins/swagger');
 const helloRoutes = require('./routes/hello');
 const healthRoutes = require('./routes/health');
+const registerDb = require('./plugins/db');
+const ideasRoutes = require('./routes/ideas');
 
 async function buildServer() {
   const env = loadEnvConfig();
@@ -14,8 +16,10 @@ async function buildServer() {
   });
 
   await app.register(registerSwagger, { appVersion: env.appVersion });
+  await app.register(registerDb);
   await app.register(helloRoutes);
   await app.register(healthRoutes, { appVersion: env.appVersion, gitCommit: env.gitCommit });
+  await app.register(ideasRoutes);
 
   app.get('/openapi.json', {
     schema: {
